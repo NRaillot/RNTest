@@ -5,11 +5,11 @@ export class PostItem extends Component {
     render() {
 
         const { post } = this.props;
-console.log(this.props)
+
         return (
             <View style={styles.Container}>
-                <Text style={{textAlign: 'center'}}>{post.title}</Text>
-                <Text style={{textAlign: 'center'}}>{post.body}</Text>
+                <Text style={styles.Title}>{post.title}</Text>
+                <Text style={styles.Body}>{post.body}</Text>
             </View>
         );
     }
@@ -24,8 +24,13 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
         height:'10%',
-        width:'90%',
         justifyContent: 'center',
         backgroundColor: 'white'
+    },
+    Title: {
+        textAlign: 'center'
+    },
+    Body: {
+        margin: 5
     }
 })
