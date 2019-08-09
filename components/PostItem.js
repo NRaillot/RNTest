@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Container, Header, Content, Card, CardItem, Text, Body } from 'native-base';
 
 export class PostItem extends Component {
     render() {
@@ -8,28 +9,27 @@ export class PostItem extends Component {
 
         return (
             <View style={styles.Container}>
-                <Text style={styles.Title}>{post.title}</Text>
-                <Text style={styles.Body}>{post.body}</Text>
+                <Card>
+                    <CardItem header>
+                        <Text>{post.title}</Text>
+                    </CardItem>
+                    <CardItem>
+                        <Body>
+                            <Text>
+                                {post.body}
+                            </Text>
+                        </Body>
+                    </CardItem>
+                </Card>
             </View>
+
         );
     }
 }
 
-const styles = StyleSheet.create({
-    Container: {
-        flex: 0.1,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: '#939497',
-        margin: 10,
-        padding: 10,
-        justifyContent: 'center',
-        backgroundColor: 'white'
-    },
-    Title: {
-        textAlign: 'center'
-    },
-    Body: {
+styles = StyleSheet.create({
+    Container : {
+        flex: 1,
         margin: 5
     }
-})
+});

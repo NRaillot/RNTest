@@ -16,8 +16,12 @@ export class Posts extends Component {
         fetchPosts().then(postData => {
             let posts = this.chunk(postData.data.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)), 10);
             let pages = posts.map(postsPage => {
-                return <View style={{flex: 1}}><Text>Page {posts.indexOf(postsPage) + 1}</Text><PostsPage
-                    postsPage={postsPage}/></View>;
+                return (
+                    <View style={{flex: 1}}>
+                        <Text style={styles.Title}>Page {posts.indexOf(postsPage) + 1}</Text>
+                        <PostsPage postsPage={postsPage}/>
+                    </View>
+                );
             });
 
             this.setState({pages});
@@ -53,19 +57,19 @@ export class Posts extends Component {
     render() {
         const {pages, pageIndex} = this.state;
 
-        console.log(pages);
         return (
-            <View style={{flex: 1}}>
-                <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+            <View>
+                <ScrollView>
                     {
                         pages ? this.renderPage() : <ActivityIndicator style={{marginTop: 20}} size="large"/>
                     }
                 </ScrollView>
                 {
                     pages ?
-                        pageIndex < pages.length - 1 ? <FAB
+                        pageIndex < pages.length - 1 ?
+                        <FAB
+                            color="#111111"
                             style={styles.fabNext}
-                            small
                             label="Next Page"
                             onPress={() => this.nextPage()}
                         /> : null
@@ -73,9 +77,10 @@ export class Posts extends Component {
                 }
                 {
                     pages ?
-                        pageIndex > 0 ? <FAB
+                        pageIndex > 0 ?
+                        <FAB
+                            color="#111111"
                             style={styles.fabPrev}
-                            small
                             label="Previous Page"
                             onPress={() => this.prevPage()}
                         /> : null
@@ -87,6 +92,9 @@ export class Posts extends Component {
 }
 
 const styles = StyleSheet.create({
+    Title: {
+        textAlign: 'center'
+    },
     fabNext: {
         position: 'absolute',
         margin: 16,
