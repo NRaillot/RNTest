@@ -1,25 +1,27 @@
-import React, { Component } from 'react';
-import { Text, ScrollView, ActivityIndicator, View } from 'react-native';
+import React, {Component} from 'react';
+import {Text, ScrollView, ActivityIndicator, View, StyleSheet} from 'react-native';
 import {PostItem} from './PostItem';
 import {fetchPosts} from '../api';
 import {PostsPage} from './PostsPage';
+import {FAB} from 'react-native-paper';
 
 export class Posts extends Component {
 
     state = {
         pages: null,
-        pageIndex: 0
+        pageIndex: 0,
     };
 
     componentDidMount() {
         fetchPosts().then(postData => {
-            let posts = this.chunk(postData.data.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)),10);
+            let posts = this.chunk(postData.data.sort((a, b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)), 10);
             let pages = posts.map(postsPage => {
-                return <View style={{ flex: 1}}><Text>Page {posts.indexOf(postsPage) + 1}</Text><PostsPage postsPage={postsPage}/></View>
+                return <View style={{flex: 1}}><Text>Page {posts.indexOf(postsPage) + 1}</Text><PostsPage
+                    postsPage={postsPage}/></View>;
             });
 
             this.setState({pages});
-        })
+        });
     }
 
     chunk(array, size) {
@@ -36,24 +38,65 @@ export class Posts extends Component {
     }
 
     renderPage() {
-        const { pages, pageIndex } = this.state;
-        return pages[pageIndex]
+        const {pages, pageIndex} = this.state;
+        return pages[pageIndex];
     }
 
-    switchPage(pageIndex) {
-        this.setState({pageIndex})
+    nextPage() {
+        this.setState({pageIndex: this.state.pageIndex + 1});
+    }
+
+    prevPage() {
+        this.setState({pageIndex: this.state.pageIndex - 1});
     }
 
     render() {
-        const { pages } = this.state;
+        const {pages, pageIndex} = this.state;
 
-        console.log(pages)
+        console.log(pages);
         return (
-            <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+            <View style={{flex: 1}}>
+                <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+                    {
+                        pages ? this.renderPage() : <ActivityIndicator style={{marginTop: 20}} size="large"/>
+                    }
+                </ScrollView>
                 {
-                    pages ? this.renderPage() : <ActivityIndicator style={{marginTop: 20}} size="large" />
+                    pages ?
+                        pageIndex < pages.length - 1 ? <FAB
+                            style={styles.fabNext}
+                            small
+                            label="Next Page"
+                            onPress={() => this.nextPage()}
+                        /> : null
+                        : null
                 }
-            </ScrollView>
+                {
+                    pages ?
+                        pageIndex > 0 ? <FAB
+                            style={styles.fabPrev}
+                            small
+                            label="Previous Page"
+                            onPress={() => this.prevPage()}
+                        /> : null
+                        : null
+                }
+            </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    fabNext: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
+    fabPrev: {
+        position: 'absolute',
+        margin: 16,
+        left: 0,
+        bottom: 0,
+    },
+});
